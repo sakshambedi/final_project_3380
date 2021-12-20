@@ -4,6 +4,7 @@ Team : Team-59
 """
 
 import sqlite3
+import json
 
 class DataBase:
   def __init__(self, create=True):
@@ -34,8 +35,4 @@ class DataBase:
     self.current.execute(sql)
     rows = self.current.fetchall()
     for row in rows:
-        print(row)
-    
-  def convert_table_to_json(){
-     
-  }
+      print(row)
