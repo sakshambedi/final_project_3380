@@ -10,7 +10,7 @@ class DataBase:
   def __init__(self, create=True):
     self.current = None
     try: 
-      print("Connecting to database...")
+      # print("Connecting to database...")
       self.con = sqlite3.connect('database.db')
       self.current = self.con.cursor()
       if create :
@@ -29,11 +29,16 @@ class DataBase:
   def close(self):
     self.con.close() 
     
-    
-  def all_players(self):
-    sql = "SELECT * FROM nba_player limit 10"
+  
+  """
+  Summary : getting a table based upon the name of the table 
+            refactored code from 
+  """
+  def get_table(self, table_name):
+    sql = "SELECT * FROM " + table_name
+    # print("Query : " + sql) 
     # just to get the column names , no other use atm 
-    schema = pd.read_sql_query("select * from nba_player", self.con)
+    schema = pd.read_sql_query(sql, self.con)
     self.current.execute(sql)
     rows = self.current.fetchall()
     
@@ -42,5 +47,5 @@ class DataBase:
     for each_row in schema:
       table_schema.append(each_row) 
     
-    print(table_schema)
+    # print(table_schema)
     return table_schema, rows 
