@@ -2,7 +2,7 @@ How to RUN:
 
 
 ## Windows:
-(make sure you have pre - requirements installed in requirements.txt)
+(make sure you have pre - requirements installed check (requirements.txt))
 Open the folder dist and run the main.exe
 Voila thats it ! 
 
