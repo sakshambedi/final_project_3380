@@ -1,4 +1,4 @@
-from tkinter import * 
+from tkinter import Tk, Label, Button, StringVar, Frame, OptionMenu 
 from tkinter import ttk
 from database import DataBase
 
@@ -12,11 +12,11 @@ class Gui:
     ws.geometry('800x600')
 
     view_table = ttk.Button(ws, text = 'View Tables', command = self.view_table)
-    top_3_winning = ttk.Button(ws, text = 'Top 3 Teams(Winning)', command = self.top_3_winning).pack()
-    top_3_winning_as_away = ttk.Button(ws, text = 'Top 3 Away Teams Winning', command = self.top_3_winning_away).pack()
-    top_3_winning_special = ttk.Button(ws, text = 'Top 3 Most Wins and Number of Wins', command = self.top_3_special).pack()
-    player_query4 = ttk.Button(ws, text = 'Top 3 Players played most seasons', command = self.player_query4).pack()
-    ref_every_game = ttk.Button(ws, text = 'Refree all game', command = self.ref_every_game)
+    top_3_winning = ttk.Button(ws, text = 'Top 3 Teams(Winning)', command = self.top_3_winning)
+    top_3_winning_away = ttk.Button(ws, text = 'Top 3 Away Teams Winning', command = self.top_3_winning_away)
+    top_3_winning_special = ttk.Button(ws, text = 'Top 3 Most Wins and Number of Wins', command = self.top_3_special)
+    player_query4 = ttk.Button(ws, text = 'Top 3 Players played most seasons', command = self.player_query4)
+    ref_every_game = ttk.Button(ws, text = 'All referees that have overseen all games', command = self.ref_every_game)
     players_double = ttk.Button(ws, text = 'Players with double-double', command = self.players_double)
     player_triple = ttk.Button(ws, text = 'Players with most triple-double', command = self.player_triple)
     player_closeto_triple = ttk.Button(ws, text = 'Players that are close to the triple-double', command = self.player_closeto_triple)
@@ -24,9 +24,28 @@ class Gui:
     arena_most_points = ttk.Button(ws, text = 'Arena with most points', command = self.arena_most_points)
     arena_least_points = ttk.Button(ws, text = 'Arena with least points', command = self.arena_least_points)
     team_most_points_combined = ttk.Button(ws, text = 'Team with most points combined', command = self.team_most_points_combined)
-    
-    
+    non_nba_not_drafted = ttk.Button(ws, text = 'Non-NBA Team Player not drafted', command = self.non_NBA_not_drafted)
+    average_weight_player = ttk.Button(ws, text = 'Average weight of drafted players', command = self.average_weight_players)
+    ref_seen_most_points = ttk.Button(ws, text = 'Referee that saw most points', command = self.ref_seen_most_points)
+    player_query26 = ttk.Button(ws, text = 'Countries with most NBA players and number of players', command = self.player_query26)
+    average_points_1st = ttk.Button(ws, text = 'Average points of 1st round 1st pick of all draft', command = self.average_points_1st)
+    average_1st_round_30th_pick = ttk.Button(ws, text = 'Average points of 1st round 30th pick of all draft', command = self.average_1st_round_30th_pick)
+    find_dallas_player = ttk.Button(ws, text = 'Dallas player playing for 10 years ', command = self.find_dallas_player)
+    count_num_player_country = ttk.Button(ws, text = 'Count number of players in each country ordered desc', command = self.count_num_player_country)
+    player_attende_7_allstar = ttk.Button(ws, text = 'Players that attended all 7-star games', command = self.player_attende_7_allstar)
+    most_all_star = ttk.Button(ws, text = 'Team with most all-star players in history', command = self.most_all_star)
+    player_longest_played = ttk.Button(ws, text = 'Player with longest played years in NBA', command = self.player_longest_played)
+    team_highest_mark_game = ttk.Button(ws, text = 'Team with highest mark in a game in history', command = self.team_highest_mark_game)
+    top_5_oversea_players = ttk.Button(ws, text = 'Top 5 players from oversea countries and their teams', command = self.top_5_oversea_players)
+    best_player_NBA = ttk.Button(ws, text = 'Best player in NBA history using given formula', command = self.best_player_NBA)
+    worst_team_NBA = ttk.Button(ws, text = 'Worst team in NBA history using given formula', command = self.worst_team_NBA)
+    team_wins_home_season = ttk.Button(ws, text = 'Team with most wins in home in a certain season', command = self.team_wins_home_season)
+     
     view_table.pack()
+    top_3_winning.pack()
+    top_3_winning_away.pack()
+    top_3_winning_special.pack()
+    player_query4.pack()
     ref_every_game.pack()
     players_double.pack()
     player_triple.pack()
@@ -35,6 +54,22 @@ class Gui:
     arena_most_points.pack()
     arena_least_points.pack()
     team_most_points_combined.pack()
+    non_nba_not_drafted.pack()
+    average_weight_player.pack()
+    ref_seen_most_points.pack()
+    player_query26.pack()
+    average_points_1st.pack()
+    average_1st_round_30th_pick.pack()
+    find_dallas_player.pack()
+    count_num_player_country.pack()
+    player_attende_7_allstar.pack()
+    most_all_star.pack()
+    player_longest_played.pack()
+    team_highest_mark_game.pack()
+    top_5_oversea_players.pack()
+    best_player_NBA.pack()
+    worst_team_NBA.pack()
+    team_wins_home_season.pack()
     
     quit = ttk.Button(ws, text = 'Quit', command = ws.destroy)
     quit.pack()
@@ -44,7 +79,6 @@ class Gui:
   """"""
   def top_3_winning(self):
     table_schema, data = self.db.return_query_table("SELECT cityName, nickname, count(WL_away) as numWins FROM GAME JOIN team ON idTeamAway=idTeam WHERE WL_away = 'W' GROUP BY idTeam ORDER BY numWins DESC LIMIT 3;")
-    # sql_command= input_command
     self.represent_queries('Top 3 Winning Teams', table_schema, data)
     
     
@@ -94,6 +128,75 @@ class Gui:
     table_schema, data = self.db.return_query_table("SELECT cityName, nickname, avg(PTS_home) FROM arena NATURAL JOIN team JOIN game ON idTeamHome=idTeam NATURAL JOIN game_stats GROUP BY arenaName ORDER BY avg(PTS_home) DESC LIMIT 1;")
     self.represent_queries('Team with most points combined', table_schema, data)
   
+  
+  def non_NBA_not_drafted(self):
+    table_schema, data = self.db.return_query_table("SELECT nameNonPlayer FROM nonNBA_player EXCEPT SELECT nameNonPlayer FROM nonNBA_player JOIN draft_player ON idNonPlayer=idPlayer;")
+    self.represent_queries('Non-NBA players not drafted', table_schema, data)
+  
+  def average_weight_players(self):
+    table_schema, data = self.db.return_query_table("SELECT avg(weight) FROM nonNBA_player JOIN draft_player ON idNonPlayer=idPlayer;")
+    self.represent_queries('Average weight of players', table_schema, data)
+  
+  def ref_seen_most_points(self):
+    table_schema, data = self.db.return_query_table("SELECT SELECT firstName, lastName, sum(PTS_home+PTS_away) as numPointsSeen FROM referee NATURAL JOIN oversee NATURAL JOIN game NATURAL JOIN game_stats GROUP BY idReferee ORDER BY numPointsSeen DESC LIMIT 1;")
+    self.represent_queries('Referee with most points', table_schema, data)
+  
+  def player_query26(self):
+    table_schema, data = self.db.return_query_table("SELECT countryName, count(idPlayer) as numPlayers FROM nba_player JOIN country on nba_player.country=countryName GROUP BY countryName ORDER BY numPlayers DESC LIMIT 10;")
+    self.represent_queries('Country with most players in NBA and their names ', table_schema, data)
+  
+  
+  def average_points_1st(self):
+    table_schema, data = self.db.return_query_table("SELECT namePlayer, avg(points)  FROM draft_player NATURAL JOIN nba_player NATURAL JOIN nba_player_stats WHERE numberRound = 1 AND numberRoundPick = 1;")
+    self.represent_queries('Average points of the 1st round 1st pick of all draft', table_schema, data)
+  
+  def average_1st_round_30th_pick(self):
+    table_schema, data = self.db.return_query_table("SELECT namePlayer, avg(points)  FROM draft_player NATURAL JOIN nba_player NATURAL JOIN nba_player_stats WHERE numberRound = 1 AND numberRoundPick = 30;")
+    self.represent_queries('Average points of the 1st round 30th pick of all draft', table_schema, data)
+  
+  def find_dallas_player(self):
+    table_schema, data = self.db.return_query_table("SELECT idPlayer as id, namePlayer as name, toYear - fromYear as playIn from nba_player natural join team where cityName = 'Dallas' and playIn > 10 order by playIn DESC")
+    self.represent_queries('Players who play for Dallas more than 10 years order desc', table_schema, data)
+ 
+  def count_num_player_country(self):
+    table_schema, data = self.db.return_query_table("Select idPlayer as id, namePlayer as name, toYear - fromYear as playedYear from nba_player where isActive = 'Active' order by toYear - fromYear DESC limit 10")
+    self.represent_queries('Count the number of players from each country order by number of players desc', table_schema, data)
+    
+  def player_attende_7_allstar(self):
+    table_schema, data = self.db.return_query_table("CREATE VIEW 'Q3' AS Select idPlayer as id, namePlayer as name, toYear - fromYear as playedYear from nba_player where isActive = 'Active' order by toYear - fromYear DESC limit 10")
+    self.represent_queries('Players who attended more than 7 allstar games', table_schema, data)
+  
+  def most_all_star(self):
+    table_schema, data = self.db.return_query_table("SELECT namePlayer, count(idPlayer) as numAllStarGames FROM allstar_player NATURAL JOIN nba_player GROUP BY idPlayer ORDER BY numAllStarGames DESC LIMIT 1;")
+    self.represent_queries('Most teams with all star games', table_schema, data)
+  
+  
+  def player_longest_played(self):
+    table_schema, data = self.db.return_query_table("Select idPlayer as id, namePlayer as name, toYear - fromYear as playedYear from nba_player where isActive = 'Active' order by toYear - fromYear DESC limit 10")
+    self.represent_queries('Player with longest played years in NBA', table_schema, data)
+  
+  
+  def team_highest_mark_game(self):
+    table_schema, data = self.db.return_query_table("SELECT count(idPlayer) as playerNumber, nickname as teamName, sum(points) from nba_player natural join team natural join nba_player_stats where isActive ='Active' group by nickname order by sum(points) DESC")
+    self.represent_queries('Team with highest average mark in game in current', table_schema, data)
+    
+  def top_5_oversea_players(self):
+    table_schema, data = self.db.return_query_table("SELECT idplayer as id, namePlayer, country, nickname, points from nba_player natural join nba_player_stats natural join team where isActive ='Active' and country != 'USA' order by points DESC limit 5")
+    self.represent_queries('Top 5 players from oversea countries', table_schema, data)
+    
+  def best_player_NBA(self):
+    table_schema, data = self.db.return_query_table("SELECT idplayer as id, namePlayer, nickname, points*0.4+ assists*0.3 + rebounds*0.3  OVA from nba_player NATURAL join nba_player_stats natural join team where isActive ='Active' order by OVA DESC limit 5")
+    self.represent_queries('Best player in NBA using given formula', table_schema, data)
+    
+  def worst_team_NBA(self):
+    table_schema, data = self.db.return_query_table("SELECT nickname as team, sum(points)*0.5+sum(rebounds)*0.4+ sum(assists)*0.3 as teamOVA FROM team NATURAL JOIN nba_player_stats natural JOIN nba_player where isActive = 'Active' group by team order by teamOVA")
+    self.represent_queries('Worst team in NBA using given formula', table_schema, data)
+  
+  def team_wins_home_season(self):
+    table_schema, data = self.db.return_query_table("Select nickname as team, count(WL_home = 'W') as homeWIN from team NATURAL JOIN game NATURAL JOIN season where year = '2019' and team.idTeam = game.idTeamHome group by team order by homeWIN")
+    self.represent_queries('Team get how many wins in their home in a certain season', table_schema, data)
+    
+    
   """represent queries any query from the database (refactored)
   """
   def represent_queries(self,input_title, input_schema, all_data ):
@@ -157,9 +260,6 @@ class Gui:
 
       #defining the columns for the table
       my_table = ttk.Treeview(window_frame, columns = table_schema, show = 'headings')
-      # my_table['columns'] = table_schema
-      # print(my_table['columns'])
-      # my_table.column("#0", width = 100, minwidth = 0, stretch = NO)
       for heading in table_schema:
         my_table.heading(heading, text = heading) 
 
