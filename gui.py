@@ -100,7 +100,7 @@ class Gui:
     
 
   def players_double(self):
-    table_schema, data = self.db.return_query_table("SELECT namePlayer FROM nba_player NATURAL JOIN nba_player_stats WHERE points>=10 AND rebounds>=10 AND assists>=10;" )
+    table_schema, data = self.db.return_query_table("SELECT namePlayer FROM nba_player NATURAL JOIN nba_player_stats WHERE points>=10 AND rebounds>=10 OR points>=10 AND assists>=10 OR rebounds>=10 AND assists>=10;" )
     self.represent_queries('Players Double Double', table_schema, data)
       
   def player_triple(self):
