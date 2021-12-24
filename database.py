@@ -49,3 +49,19 @@ class DataBase:
     
     # print(table_schema)
     return table_schema, rows 
+  
+
+  def return_query_table(self, sql_command):
+    sql = str(sql_command)
+    # "SELECT cityName, nickname, count(WL_away) as numWins FROM GAME JOIN team ON idTeamAway=idTeam WHERE WL_away = 'W' GROUP BY idTeam ORDER BY numWins DESC LIMIT 3;"
+    schema = pd.read_sql_query(sql, self.con)
+    self.current.execute(sql)
+    rows = self.current.fetchall()
+    
+    
+    table_schema = []
+    for each_row in schema:
+      table_schema.append(each_row) 
+    
+    # print(table_schema)
+    return table_schema, rows 
