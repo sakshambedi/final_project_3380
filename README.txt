@@ -13,5 +13,8 @@ Then using shell of your choice run python main.py install
 
 Warning:Tkinker shows an error about about the font in linux because of some issue in the Tkinker Library. Please ignore that can not fixed
 
+Working:
+https://youtu.be/au11Z3xwfhM
+
 Well Done:)
 
