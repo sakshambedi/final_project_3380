@@ -100,7 +100,7 @@ class Gui:
     
 
   def players_double(self):
-    table_schema, data = self.db.return_query_table("SELECT namePlayer FROM nba_player NATURAL JOIN nba_player_stats WHERE points>=10 AND rebounds>=10 AND assists>=10;" )
+    table_schema, data = self.db.return_query_table("SELECT namePlayer FROM nba_player NATURAL JOIN nba_player_stats WHERE points>=10 AND rebounds>=10 OR points>=10 AND assists>=10 OR rebounds>=10 AND assists>=10;" )
     self.represent_queries('Players Double Double', table_schema, data)
       
   def player_triple(self):
@@ -138,7 +138,7 @@ class Gui:
     self.represent_queries('Average weight of players', table_schema, data)
   
   def ref_seen_most_points(self):
-    table_schema, data = self.db.return_query_table("SELECT SELECT firstName, lastName, sum(PTS_home+PTS_away) as numPointsSeen FROM referee NATURAL JOIN oversee NATURAL JOIN game NATURAL JOIN game_stats GROUP BY idReferee ORDER BY numPointsSeen DESC LIMIT 1;")
+    table_schema, data = self.db.return_query_table("SELECT firstName, lastName, sum(PTS_home+PTS_away) as numPointsSeen FROM referee NATURAL JOIN oversee NATURAL JOIN game NATURAL JOIN game_stats GROUP BY idReferee ORDER BY numPointsSeen DESC LIMIT 1;")
     self.represent_queries('Referee with most points', table_schema, data)
   
   def player_query26(self):
